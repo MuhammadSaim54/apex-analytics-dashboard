@@ -197,7 +197,7 @@ export default function Sidebar({
   return (
     <>
       <aside 
-        className={`hidden lg:flex h-screen border-r border-[var(--border-subtle)] transition-all duration-300 select-none z-30 flex-shrink-0 max-w-fit ${
+        className={`hidden lg:flex h-screen border-r border-[var(--border-subtle)] max-w-fit transition-all duration-300 select-none z-30 flex-shrink-0 max-w-fit ${
           collapsed ? 'w-[72px]' : 'w-64'
         }`}
       >
