@@ -62,7 +62,7 @@ export default function RegionalTrafficBarChart() {
         </div>
       </div>
 
-      {/* Bar Chart Area (Fluid Aspect Ratio Container) */}
+      {/* Bar Chart Canvas Area */}
       <div className="w-full h-64 sm:h-72 lg:h-80 pt-4 select-none">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart 
@@ -84,17 +84,17 @@ export default function RegionalTrafficBarChart() {
               dx={-2}
             />
             
-            {/* Cursor transparent disables the ugly grey bar artifact */}
+            {/* cursor={false} grey background pillar artifact ko completely remove kar deta hai */}
             <Tooltip 
               content={<CustomBarTooltip />} 
-              cursor={{ fill: 'rgba(15, 118, 110, 0.06)', rx: 8 }} 
+              cursor={false} 
               isAnimationActive={false}
             />
             
             <Bar 
               dataKey="reqs" 
               radius={[6, 6, 0, 0]}
-              animationDuration={800}
+              animationDuration={600}
             >
               {REGIONAL_DATA.map((entry, index) => (
                 <Cell 

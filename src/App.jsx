@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardProvider, useDashboard } from './context/DashboardContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -7,14 +7,55 @@ import RevenueAreaChart from './components/RevenueAreaChart';
 import RegionalTrafficBarChart from './components/RegionalTrafficBarChart';
 import RecentTransactionsTable from './components/RecentTransactionsTable';
 import AddTransactionModal from './components/AddTransactionModal';
+import CommandPalette from './components/CommandPalette';
 import { Plus, RotateCcw } from 'lucide-react';
 
 function DashboardContent() {
   const [activeTab, setActiveTab] = useState('overview');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
 
-  const { resetToDemoData } = useDashboard();
+  const { transactions, resetToDemoData } = useDashboard();
+
+  // Global Keyboard Shortcut: Cmd+K / Ctrl+K
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Real Dynamic CSV File Generation & Instant Download Engine
+  const handleExportCSV = () => {
+    if (!transactions.length) return;
+
+    const headers = ['Record ID', 'Customer Entity', 'Billing Email', 'Subscription Tier', 'Payment Rail', 'Monthly Revenue USD', 'Settlement Status', 'Timestamp'];
+    const rows = transactions.map((t) => [
+      t.id,
+      `"${t.customer}"`,
+      t.email,
+      t.tier,
+      t.channel,
+      t.amount,
+      t.status,
+      t.date
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `apex_telemetry_export_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="h-screen w-screen flex bg-[var(--bg-app)] overflow-hidden font-sans antialiased">
@@ -33,6 +74,8 @@ function DashboardContent() {
         <Header 
           activeTab={activeTab} 
           onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
+          onOpenCommandPalette={() => setIsCommandOpen(true)}
+          onExportCSV={handleExportCSV}
         />
 
         {/* 3. Independent Scrollable Viewport */}
@@ -54,7 +97,7 @@ function DashboardContent() {
                 <button
                   onClick={resetToDemoData}
                   className="p-2 text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-surface)] hover:bg-[var(--bg-subtle)] border border-[var(--border-subtle)] rounded-xl transition cursor-pointer"
-                  title="Reset to Demo Data"
+                  title="Reset to Demo State"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -69,16 +112,16 @@ function DashboardContent() {
               </div>
             </div>
 
-            {/* 1. Live Reactive KPI Deck */}
+            {/* Live Reactive KPI Deck */}
             <KPIDeck />
 
-            {/* 2. Phase 3: High-Frequency Visualization Engine */}
+            {/* Charts Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
               <RevenueAreaChart />
               <RegionalTrafficBarChart />
             </div>
 
-            {/* 3. Live Ingested Customer & Revenue Table */}
+            {/* Enterprise Telemetry Data Grid */}
             <RecentTransactionsTable />
 
           </div>
@@ -87,6 +130,15 @@ function DashboardContent() {
 
       {/* Add Record Modal */}
       <AddTransactionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* Global Command Palette (Cmd + K) */}
+      <CommandPalette 
+        isOpen={isCommandOpen}
+        onClose={() => setIsCommandOpen(false)}
+        onOpenAddModal={() => setIsModalOpen(true)}
+        onExportCSV={handleExportCSV}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }

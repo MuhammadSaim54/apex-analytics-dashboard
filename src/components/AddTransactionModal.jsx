@@ -9,7 +9,6 @@ import {
   ChevronDown, 
   Check, 
   Sparkles,
-  Layers,
   CreditCard,
   Building2
 } from 'lucide-react';
@@ -36,7 +35,6 @@ export default function AddTransactionModal({ isOpen, onClose }) {
   const [tier, setTier] = useState('Enterprise');
   const [channel, setChannel] = useState('Stripe');
 
-  // Custom Dropdown Open States
   const [isTierDropdownOpen, setIsTierDropdownOpen] = useState(false);
   const [isChannelDropdownOpen, setIsChannelDropdownOpen] = useState(false);
 
@@ -54,7 +52,6 @@ export default function AddTransactionModal({ isOpen, onClose }) {
       channel: channel
     });
 
-    // Reset & Close
     setCustomer('');
     setEmail('');
     setAmount('');
@@ -63,7 +60,7 @@ export default function AddTransactionModal({ isOpen, onClose }) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -73,43 +70,43 @@ export default function AddTransactionModal({ isOpen, onClose }) {
           className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs"
         />
 
-        {/* Modal Window */}
+        {/* Modal Window: Smooth Mobile Scrollable Container */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 12 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
           transition={{ type: 'spring', damping: 26, stiffness: 320 }}
-          className="relative w-full max-w-lg bg-[var(--bg-surface)] rounded-3xl shadow-[0_25px_60px_-15px_rgba(11,15,23,0.18)] border border-[var(--border-subtle)] p-6 sm:p-7 z-10"
+          className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-[var(--bg-surface)] rounded-3xl shadow-2xl border border-[var(--border-subtle)] z-10 overflow-hidden"
         >
           {/* Header */}
-          <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
+          <div className="p-4 sm:p-6 border-b border-[var(--border-subtle)] flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#0B0F17] text-[#2DD4BF] flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0B0F17] text-[#2DD4BF] flex items-center justify-center shadow-xs">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-extrabold text-[var(--text-main)]">Add Telemetry Record</h3>
-                <p className="text-xs text-[var(--text-muted)]">Live ingestion into MRR and consumer metrics</p>
+                <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-main)]">Add Telemetry Record</h3>
+                <p className="text-[11px] sm:text-xs text-[var(--text-muted)]">Live ingestion into MRR and metrics</p>
               </div>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-subtle)] rounded-xl transition cursor-pointer"
+              className="p-1.5 sm:p-2 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-subtle)] rounded-xl transition cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+          {/* Form Content: Scrollable Body on Small Screens */}
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto space-y-3.5 flex-1">
             
             {/* Customer & Email */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-main)] mb-1.5">Company / Client</label>
-                <div className="flex items-center gap-2 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 focus-within:border-[var(--primary)] focus-within:bg-white transition">
-                  <Building className="w-4 h-4 text-[var(--text-subtle)]" />
+                <label className="block text-[11px] sm:text-xs font-semibold text-[var(--text-main)] mb-1">Company / Client</label>
+                <div className="flex items-center gap-2 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] rounded-xl px-3 py-2 sm:py-2.5 focus-within:border-[var(--primary)] focus-within:bg-white transition">
+                  <Building className="w-4 h-4 text-[var(--text-subtle)] flex-shrink-0" />
                   <input
                     type="text"
                     required
@@ -122,9 +119,9 @@ export default function AddTransactionModal({ isOpen, onClose }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-main)] mb-1.5">Billing Email</label>
-                <div className="flex items-center gap-2 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 focus-within:border-[var(--primary)] focus-within:bg-white transition">
-                  <Mail className="w-4 h-4 text-[var(--text-subtle)]" />
+                <label className="block text-[11px] sm:text-xs font-semibold text-[var(--text-main)] mb-1">Billing Email</label>
+                <div className="flex items-center gap-2 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] rounded-xl px-3 py-2 sm:py-2.5 focus-within:border-[var(--primary)] focus-within:bg-white transition">
+                  <Mail className="w-4 h-4 text-[var(--text-subtle)] flex-shrink-0" />
                   <input
                     type="email"
                     placeholder="finance@openai.com"
@@ -138,9 +135,9 @@ export default function AddTransactionModal({ isOpen, onClose }) {
 
             {/* Amount */}
             <div>
-              <label className="block text-xs font-semibold text-[var(--text-main)] mb-1.5">Monthly Amount (USD)</label>
-              <div className="flex items-center gap-2 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] rounded-xl px-3.5 py-2.5 focus-within:border-[var(--primary)] focus-within:bg-white transition">
-                <DollarSign className="w-4 h-4 text-[var(--text-subtle)]" />
+              <label className="block text-[11px] sm:text-xs font-semibold text-[var(--text-main)] mb-1">Monthly Amount (USD)</label>
+              <div className="flex items-center gap-2 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] rounded-xl px-3 py-2 sm:py-2.5 focus-within:border-[var(--primary)] focus-within:bg-white transition">
+                <DollarSign className="w-4 h-4 text-[var(--text-subtle)] flex-shrink-0" />
                 <input
                   type="number"
                   step="any"
@@ -148,24 +145,24 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                   placeholder="e.g. 25000"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="bg-transparent text-sm text-[var(--text-main)] placeholder-[var(--text-subtle)] outline-none w-full font-bold"
+                  className="bg-transparent text-xs sm:text-sm text-[var(--text-main)] placeholder-[var(--text-subtle)] outline-none w-full font-bold"
                 />
               </div>
             </div>
 
-            {/* Premium Custom Dropdowns Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+            {/* Custom Dropdowns */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5">
               
-              {/* 1. Custom Tier Dropdown */}
+              {/* Tier Dropdown */}
               <div className="relative">
-                <label className="block text-xs font-semibold text-[var(--text-main)] mb-1.5">Subscription Tier</label>
+                <label className="block text-[11px] sm:text-xs font-semibold text-[var(--text-main)] mb-1">Subscription Tier</label>
                 <button
                   type="button"
                   onClick={() => {
                     setIsTierDropdownOpen(!isTierDropdownOpen);
                     setIsChannelDropdownOpen(false);
                   }}
-                  className="w-full flex items-center justify-between bg-[var(--bg-subtle)] border border-[var(--border-subtle)] hover:border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-main)] transition cursor-pointer"
+                  className="w-full flex items-center justify-between bg-[var(--bg-subtle)] border border-[var(--border-subtle)] hover:border-slate-300 rounded-xl px-3 py-2 sm:py-2.5 text-xs font-semibold text-[var(--text-main)] transition cursor-pointer"
                 >
                   <div className="flex items-center gap-2 truncate">
                     <span className="w-2 h-2 rounded-full bg-[#0F766E]" />
@@ -175,7 +172,7 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                 </button>
 
                 {isTierDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl border border-[var(--border-subtle)] p-1.5 z-30 animate-in fade-in zoom-in-95">
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-2xl shadow-xl border border-[var(--border-subtle)] p-1.5 z-30 animate-in fade-in zoom-in-95">
                     {TIER_OPTIONS.map((item) => (
                       <div
                         key={item.id}
@@ -198,16 +195,16 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                 )}
               </div>
 
-              {/* 2. Custom Channel Dropdown */}
+              {/* Channel Dropdown */}
               <div className="relative">
-                <label className="block text-xs font-semibold text-[var(--text-main)] mb-1.5">Payment Rail</label>
+                <label className="block text-[11px] sm:text-xs font-semibold text-[var(--text-main)] mb-1">Payment Rail</label>
                 <button
                   type="button"
                   onClick={() => {
                     setIsChannelDropdownOpen(!isChannelDropdownOpen);
                     setIsTierDropdownOpen(false);
                   }}
-                  className="w-full flex items-center justify-between bg-[var(--bg-subtle)] border border-[var(--border-subtle)] hover:border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[var(--text-main)] transition cursor-pointer"
+                  className="w-full flex items-center justify-between bg-[var(--bg-subtle)] border border-[var(--border-subtle)] hover:border-slate-300 rounded-xl px-3 py-2 sm:py-2.5 text-xs font-semibold text-[var(--text-main)] transition cursor-pointer"
                 >
                   <div className="flex items-center gap-2 truncate">
                     <CreditCard className="w-3.5 h-3.5 text-[var(--primary)]" />
@@ -217,7 +214,7 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                 </button>
 
                 {isChannelDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl border border-[var(--border-subtle)] p-1.5 z-30 animate-in fade-in zoom-in-95">
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-2xl shadow-xl border border-[var(--border-subtle)] p-1.5 z-30 animate-in fade-in zoom-in-95">
                     {CHANNEL_OPTIONS.map((item) => {
                       const Icon = item.icon;
                       return (
@@ -245,18 +242,18 @@ export default function AddTransactionModal({ isOpen, onClose }) {
 
             </div>
 
-            {/* Actions */}
-            <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-end gap-2.5">
+            {/* Bottom Form Actions */}
+            <div className="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-end gap-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-subtle)] transition cursor-pointer"
+                className="px-3.5 py-2 rounded-xl text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-subtle)] transition cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2.5 rounded-xl bg-[#0B0F17] hover:bg-[#1A2232] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-[#0B0F17] hover:bg-[#1A2232] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 text-[#2DD4BF]" />
                 <span>Inject Record & Recalculate</span>
