@@ -3,6 +3,8 @@ import { DashboardProvider, useDashboard } from './context/DashboardContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import KPIDeck from './components/KPIDeck';
+import RevenueAreaChart from './components/RevenueAreaChart';
+import RegionalTrafficBarChart from './components/RegionalTrafficBarChart';
 import RecentTransactionsTable from './components/RecentTransactionsTable';
 import AddTransactionModal from './components/AddTransactionModal';
 import { Plus, RotateCcw } from 'lucide-react';
@@ -67,10 +69,16 @@ function DashboardContent() {
               </div>
             </div>
 
-            {/* Live Reactive KPI Deck */}
+            {/* 1. Live Reactive KPI Deck */}
             <KPIDeck />
 
-            {/* Live Ingested Customer & Revenue Table */}
+            {/* 2. Phase 3: High-Frequency Visualization Engine */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+              <RevenueAreaChart />
+              <RegionalTrafficBarChart />
+            </div>
+
+            {/* 3. Live Ingested Customer & Revenue Table */}
             <RecentTransactionsTable />
 
           </div>
