@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+  <!-- Dark Obsidian Base with smooth rounded squircle corners -->
+  <rect width="36" height="36" rx="9" fill="#0B0F17" />
+  
+  <!-- Outer White Apex Peak 'A' -->
+  <path 
+    d="M18 10L25 25H20.5L18 19.5L15.5 25H11L18 10Z" 
+    fill="#FFFFFF" 
+  />
+  
+  <!-- Inner Electric Mint Core Accent -->
+  <polygon 
+    points="18,20 20.2,25 15.8,25" 
+    fill="#2DD4BF" 
+  />
+</svg>
